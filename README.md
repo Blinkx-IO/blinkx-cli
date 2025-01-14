@@ -1,6 +1,8 @@
 ### Blinkx CLI
 
 This is a CLI for Blinkx CMS. It is written in Zig.
+THIS IS A WORK IN PROGRESS  
+DO NOT USE IN PRODUCTION YET    
 
 ### Installation
 
