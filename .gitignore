@@ -1,0 +1,51 @@
+# Zig build artifacts
+zig-cache/
+.zig-cache/
+zig-out/
+build/
+build-*/
+
+# Binary outputs
+*.exe
+*.pdb
+*.obj
+*.o
+*.a
+*.lib
+*.so
+*.dll
+*.dylib
+
+# Debug files
+*.dSYM/
+*.su
+*.idb
+*.pdb
+
+# Editor specific files
+.vscode/
+.idea/
+*.swp
+*~
+
+# OS specific files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Project specific
+# Add any project-specific files or directories you want to ignore
+
+# Environment files
+.env
+*.env
+.env.local
+.env.*.local
+
+# Dependency directories (if you're using any package managers)
+deps/
+
