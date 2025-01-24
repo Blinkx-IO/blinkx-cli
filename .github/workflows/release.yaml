@@ -32,11 +32,11 @@ jobs:
       - name: Build macOS
         run: |
           # Build for Intel Macs
-          zig build -Dtarget=x86_64-macos.10.13-none -Doptimize=ReleaseSafe
+          zig build -Dtarget=x86_64-macos-none -Doptimize=ReleaseSafe
           mv zig-out/bin/blinkx blinkx-macos-x86_64
 
           # Build for Apple Silicon (M1/M2)
-          zig build -Dtarget=aarch64-macos.11-none -Doptimize=ReleaseSafe
+          zig build -Dtarget=aarch64-macos-none -Doptimize=ReleaseSafe
           mv zig-out/bin/blinkx blinkx-macos-arm64
 
       - name: Create Release
