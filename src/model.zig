@@ -9,7 +9,7 @@ pub const Config = struct {
     collectionid: u16 = undefined,
     version: []const u8 = undefined,
     page_url: []const u8 = undefined,
-
+    body: []const u8 = undefined,
     /// This is a comptime variable that can be set to .DEV or .PROD
     mode: Mode = .DEV,
     // endpoint: []const u8 = "https://api.blinkx.com/v1",

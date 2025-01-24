@@ -9,8 +9,6 @@ pub fn main() !void {
 
     //This is only for testing in dev mode
     if (model.config.mode == .DEV) {
-        model.config.endpoint = "http://localhost:8080/api/v1";
-        model.config.ai_endpoint = "https://ai.blinkx.workers.dev";
         std.log.debug("Running in DEV mode with endpoint: {s}", .{model.config.endpoint});
     }
 
@@ -29,11 +27,7 @@ pub fn main() !void {
                     .value_ref = r.mkRef(&model.config.apikey),
                 },
             },
-            // .target = CliBuilder.CommandTarget{
-            //     .action = CliBuilder.CommandAction{
-            //         .exec = run_server,
-            //     },
-            // },
+
             .target = CliBuilder.CommandTarget{
                 .subcommands = &.{try content.contentCommand(&r)},
             },
@@ -41,4 +35,8 @@ pub fn main() !void {
     };
 
     return r.run(&app);
+}
+
+fn run_server() !void {
+    std.log.debug("Running server", .{});
 }

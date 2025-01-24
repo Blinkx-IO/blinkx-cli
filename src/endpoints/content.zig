@@ -6,15 +6,24 @@ const requests = @import("requests.zig");
 // Reference the model config directly
 pub fn contentCommand(r: *CliBuilder.AppRunner) !CliBuilder.Command {
     const message =
-        \\ This is a multiline
-        \\ string in Zig.
-        \\ Each line starts with 
+        \\ Get content by itemid, collectionid, version, page_url, body
+        \\  
+        \\ Example: 
+        \\ 
+        \\ Get content by itemid
+        \\ 
+        \\ $ blinkx content --itemid 123
+        \\ 
+        \\ Get content by collectionid
+        \\ 
+        \\ $ blinkx content --projectid 123
+        \\ 
     ;
 
     return CliBuilder.Command{
         .name = "content",
         .description = CliBuilder.Description{
-            .one_line = "Get content",
+            .one_line = "Get content from Blinkx",
             .detailed = message,
         },
         .options = try r.allocOptions(&.{
@@ -23,7 +32,6 @@ pub fn contentCommand(r: *CliBuilder.AppRunner) !CliBuilder.Command {
                 .help = "content to display by itemid",
                 .value_ref = r.mkRef(&model.config.itemid),
                 .value_name = "INT",
-                .required = true,
                 .short_alias = 'i',
             },
             CliBuilder.Option{
@@ -32,6 +40,27 @@ pub fn contentCommand(r: *CliBuilder.AppRunner) !CliBuilder.Command {
                 .value_ref = r.mkRef(&model.config.collectionid),
                 .value_name = "INT",
                 .short_alias = 'p',
+            },
+            CliBuilder.Option{
+                .long_name = "version",
+                .help = "content to display by version",
+                .value_ref = r.mkRef(&model.config.version),
+                .value_name = "STRING",
+                .short_alias = 'v',
+            },
+            CliBuilder.Option{
+                .long_name = "page_url",
+                .help = "content to display by page url",
+                .value_ref = r.mkRef(&model.config.page_url),
+                .value_name = "STRING",
+                .short_alias = 'u',
+            },
+            CliBuilder.Option{
+                .long_name = "body",
+                .help = "specific content to display in request body as a list of options html, components, css, assets, fonts, styles separated by commas ie html,components,css if not set all fields will be returned",
+                .value_ref = r.mkRef(&model.config.body),
+                .value_name = "STRING",
+                .short_alias = 'b',
             },
         }),
         .target = CliBuilder.CommandTarget{
