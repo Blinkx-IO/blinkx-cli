@@ -4,6 +4,13 @@ A command-line interface for Blinkx CMS, written in Zig.
 
 **⚠️ WORK IN PROGRESS - NOT FOR PRODUCTION USE**
 
+## ⚠️ IMPORTANT VERSION REQUIREMENT ⚠️
+
+This project requires:
+- **Zig version: 0.14.0-dev.2851+b074fb7dd**
+
+It is strongly recommended to use [ZVM (Zig Version Manager)](https://github.com/tristanisham/zvm) to manage your Zig and ZLS versions.
+
 ## Installation
 
 1. Install Zig

@@ -27,7 +27,7 @@ jobs:
       - name: Build Windows
         run: |
           zig build -Dtarget=x86_64-windows-gnu -Doptimize=ReleaseSafe
-          mv zig-out/bin/* blinkx-windows-x86_64.exe
+          mv zig-out/bin/blinkx.exe blinkx-windows-x86_64.exe
 
       - name: Build macOS
         run: |
