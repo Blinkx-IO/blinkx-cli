@@ -1,0 +1,49 @@
+name: Release
+
+on:
+  push:
+    branches: ['main']
+
+jobs:
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Zig
+        uses: goto-bus-stop/setup-zig@v2
+        with:
+          version: 0.14.0-dev.2851+b074fb7dd
+
+      - name: Build Linux
+        run: |
+          zig build -Dtarget=x86_64-linux-gnu -Doptimize=ReleaseSafe
+          mv zig-out/bin/* blinkx-linux-x86_64
+
+      - name: Build Windows
+        run: |
+          zig build -Dtarget=x86_64-windows-gnu -Doptimize=ReleaseSafe
+          mv zig-out/bin/* blinkx-windows-x86_64.exe
+
+      - name: Build macOS
+        run: |
+          zig build -Dtarget=x86_64-macos-gnu -Doptimize=ReleaseSafe
+          mv zig-out/bin/* blinkx-macos-x86_64
+
+      - name: Create Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ github.run_number }}
+          name: Release ${{ github.run_number }}
+          draft: false
+          prerelease: false
+          files: |
+            blinkx-linux-x86_64
+            blinkx-windows-x86_64.exe
+            blinkx-macos-x86_64
+          generate_release_notes: true
