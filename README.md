@@ -18,6 +18,15 @@ It is strongly recommended to use [ZVM (Zig Version Manager)](https://github.com
 3. Run `zig build`
 4. Run the executable from `zig-out/bin/blinkx`
 
+## Dependencies
+
+This project uses the following external libraries:
+
+- [zig-cli](https://github.com/sam701/zig-cli) - A command line argument parser for Zig
+  - Author: [sam701](https://github.com/sam701)
+  - License: MIT
+  - Used for CLI argument parsing and command structure
+
 ## Environment Variables
 
 - `BLINKX_APIKEY`: Your Blinkx API key (can also be provided via --apikey flag)
@@ -74,4 +83,6 @@ Get content by project ID:
 ```bash
 $ blinkx content --projectid 456
 ```
+### License
 
+This project is licensed under the MIT License - see the LICENSE file for details.
