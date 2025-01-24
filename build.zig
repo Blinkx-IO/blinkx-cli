@@ -36,6 +36,19 @@ pub fn build(b: *std.Build) void {
         .target = target,
         .optimize = optimize,
     });
+    // Add build option for mode
+    const mode_option = b.option(
+        bool,
+        "production",
+        "Build in production mode (default: false)",
+    ) orelse false;
+
+    // Add build options this beocomes Dproudction=true
+    const options = b.addOptions();
+    // exe.addOptions("build_options", options);
+    options.addOption(bool, "production_mode", mode_option);
+    const options_module = options.createModule();
+    exe.root_module.addImport("build_options", options_module);
     exe.root_module.addImport("zig-cli", zigcli_mod);
     // This declares intent for the executable to be installed into the
     // standard location when the user invokes the "install" step (the default

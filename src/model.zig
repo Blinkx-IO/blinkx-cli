@@ -1,5 +1,6 @@
+const options = @import("build_options");
 pub const Mode = enum { DEV, PROD };
-
+const is_prod = options.production_mode;
 // Define a configuration structure with default values.
 pub const Config = struct {
     apikey: []const u8 = "",
@@ -16,15 +17,24 @@ pub const Config = struct {
     endpoint: []const u8 = "http://localhost:8080/api/v1",
     ai_endpoint: []const u8 = "https://ai.blinkx.workers.dev",
 
-    pub fn init(mode: Mode) Config {
+    //Accounts structures
+    signup: bool = false,
+    signup_url: []const u8 = "https://blinkx.io/signup",
+
+    pub fn init() Config {
+        var mode: Mode = .DEV;
+        if (is_prod) {
+            mode = .PROD;
+        }
         return Config{
             .itemid = 0, // You can set default values here
             .apikey = "APIKEYNOTSET",
             .mode = mode,
+            .signup = false,
             .endpoint = if (mode == .DEV) "http://localhost:8080/api/v1" else "https://api.blinkx.com/v1",
             .ai_endpoint = if (mode == .DEV) "https://ai.blinkx.workers.dev" else "https://ai.blinkx.com",
         };
     }
 };
 
-pub var config = Config.init(.DEV);
+pub var config = Config.init();
