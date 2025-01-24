@@ -21,11 +21,6 @@ pub fn main() !void {
                 // Might be better to just have this as a defautl value
                 // Define an Option for the "host" command-line argument.
                 .{
-                    .long_name = "host",
-                    .help = "host to listen on",
-                    .value_ref = r.mkRef(&model.config.host),
-                },
-                .{
                     .long_name = "apikey",
                     .short_alias = 'a',
                     .help = "apikey to display",
@@ -40,7 +35,7 @@ pub fn main() !void {
             //     },
             // },
             .target = CliBuilder.CommandTarget{
-                .subcommands = &.{ try content.contentCommand2(), try content.contentCommand(&r) },
+                .subcommands = &.{try content.contentCommand(&r)},
             },
         },
     };

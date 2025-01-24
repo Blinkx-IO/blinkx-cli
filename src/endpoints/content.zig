@@ -17,64 +17,50 @@ pub fn contentCommand(r: *CliBuilder.AppRunner) !CliBuilder.Command {
             .one_line = "Get content",
             .detailed = message,
         },
-        // .options = &.{
-        //     .{
-        //         .long_name = "content",
-        //         .short_alias = 'c',
-        //         .help = "content to display",
-        //         .value_ref = r.mkRef(&model.config.itemid),
-        //     },
-        // },
+        .options = try r.allocOptions(&.{
+            CliBuilder.Option{
+                .long_name = "itemid",
+                .help = "content to display by itemid",
+                .value_ref = r.mkRef(&model.config.itemid),
+                .value_name = "INT",
+                .required = true,
+                .short_alias = 'i',
+            },
+            CliBuilder.Option{
+                .long_name = "projectid",
+                .help = "content to display by project id",
+                .value_ref = r.mkRef(&model.config.collectionid),
+                .value_name = "INT",
+                .short_alias = 'p',
+            },
+        }),
         .target = CliBuilder.CommandTarget{
             .action = CliBuilder.CommandAction{
-                .exec = getContent,
-                .positional_args = CliBuilder.PositionalArgs{
-                    .optional = try r.mkSlice(CliBuilder.PositionalArg, &.{
-                        CliBuilder.PositionalArg{
-                            .name = "content3",
-                            // .short_alias = 'c',
-                            .help = "content to display",
-                            .value_ref = r.mkRef(&model.config.apikey),
-                            // .value_ref = r.mkRef(&model.config.itemid),
-                        },
-                    }),
-                    //     // .required = try r.mkSlice(CliBuilder.PositionalArg, &.{
-                    //     //     CliBuilder.PositionalArg{
-                    //     //         .name = "content2",
-                    //     //         .help = "content to display",
-                    //     //         // .value_ref = r.mkRef(&model.config.itemid),
-                    //     //     },
-                    //     // }),
-                },
+                .exec = GetContentItem,
+                //Use this if you want to accept positional arguments
+                // .positional_args = CliBuilder.PositionalArgs{
+                //     .optional = try r.allocPositionalArgs(&.{CliBuilder.PositionalArg{
+                //         .name = "itemid",
+                //         .help = "content to display by itemid",
+                //         .value_ref = r.mkRef(&model.config.itemid),
+                //     }}),
+                // },
             },
         },
     };
 }
-pub fn contentCommand2() !CliBuilder.Command {
-    return CliBuilder.Command{
-        .name = "content2",
-        // .options = &.{
-        //     .{
-        //         .long_name = "content",
-        //         .short_alias = 'c',
-        //         .help = "content to display",
-        //         // .required = true,
-        //         .value_ref = r.mkRef(&model.config.itemid),
-        //     },
-        // },
-        .target = CliBuilder.CommandTarget{
-            .action = CliBuilder.CommandAction{
-                .exec = getContent,
-            },
-        },
-    };
-}
-pub fn getContent() !void {
-    //item_id
-    //collection_id
-    //page_url
-    //version
-    //body
-    //{"html", "components", "css", "assets", "fonts", "styles"}
-    std.log.debug("Getting content with itemid: {s}", .{model.config.apikey});
+pub fn GetContentItem() !void {
+    const allocator = std.heap.page_allocator;
+    const url = try std.fmt.allocPrint(allocator, "{s}/content-item?item_id={d}", .{
+        model.config.endpoint,
+        model.config.itemid,
+    });
+    if (model.config.mode == .DEV) {
+        std.log.debug("Itemid is {d}", .{model.config.itemid});
+        std.log.debug("URL is {s}", .{url});
+    }
+
+    var req = try requests.Req.init(allocator, model.config.apikey);
+    const response = try req.get(url);
+    std.log.debug("Response: {s}", .{response});
 }
