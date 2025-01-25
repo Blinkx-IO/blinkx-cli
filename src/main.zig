@@ -21,9 +21,9 @@ pub fn main() !void {
         std.log.debug("Running in DEV mode with endpoint: {s}", .{model.config.endpoint});
     }
     const detailedDescription =
-        \\ Sign up for a free account at https://blinkx.io
+        \\ Sign up for a free account at [33mhttps://blinkx.io[0m
         \\
-        \\ API documentation: https://blinkx.io/api-browser 
+        \\ API documentation: [33mhttps://blinkx.io/api-browser[0m
         \\
         \\ Note: Some operations require a valid API key to be set
         \\ either via BLINKX_APIKEY environment variable or --apikey flag
