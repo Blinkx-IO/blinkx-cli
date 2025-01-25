@@ -8,7 +8,14 @@ const model = @import("model.zig");
 
 pub fn main() !void {
     var r = try CliBuilder.AppRunner.init(std.heap.page_allocator);
-
+    // Catppuccin Mocha colors (ANSI escape codes)
+    const colors = struct {
+        const rosewater = "38;2;245;224;220"; // #f5e0dc
+        const mauve = "38;2;203;166;247"; // #cba6f7
+        const green = "38;2;166;227;161"; // #a6e3a1
+        const red = "38;2;243;139;168"; // #f38ba8
+        const blue = "38;2;137;180;250"; // #89b4fa
+    };
     //This is only for testing in dev mode
     if (model.config.mode == .DEV) {
         std.log.debug("Running in DEV mode with endpoint: {s}", .{model.config.endpoint});
@@ -29,6 +36,7 @@ pub fn main() !void {
                 .one_line = "A CLI for Blinkx CMS",
                 .detailed = detailedDescription,
             },
+
             .options = &.{
                 // Might be better to just have this as a defautl value
                 // Define an Option for the "host" command-line argument.
@@ -45,6 +53,16 @@ pub fn main() !void {
             .target = CliBuilder.CommandTarget{
                 .subcommands = &.{ try content.contentCommand(&r), try accounts.accountsCommand(&r), try ai.aiCommand() },
             },
+        },
+        .version = "0.0.1",
+        .author = "Blinkx",
+        .help_config = .{
+            .color_usage = .auto,
+            .color_app_name = colors.mauve, // Mauve for app name
+            .color_section = colors.blue, // Blue for sections
+            .color_option = colors.green, // Green for options
+            .color_error = colors.red, // Red for errors
+
         },
     };
 
