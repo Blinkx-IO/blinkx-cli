@@ -1,8 +1,43 @@
 const std = @import("std");
 const model = @import("../model.zig");
 const CliBuilder = @import("zig-cli");
+const json = std.json;
 
 const requests = @import("requests.zig");
+
+const Body = struct {
+    components: []Component,
+    html: []const u8,
+    css: []const u8,
+};
+
+//TODO: make an enum for type
+const Component = struct {
+    type: []const u8,
+    components: ?[]Component = null,
+    content: ?[]const u8 = null,
+};
+
+//TODO: add seo fields
+const SeoFields = struct {};
+
+pub const ContentItem = struct {
+    item_id: i64,
+    title: []const u8,
+    content_type: []const u8,
+    body: Body,
+    status: []const u8 = "",
+    author: []const u8 = "",
+    page_url: []const u8 = "",
+    seo_fields: []const u8, //SeoFields, NOTE: this is until we get the seo fields working
+    published_date: []const u8,
+    // @"body-2": ?[]const u8,
+
+    // pub fn jsonStringify(self: @This(), allocator: std.mem.Allocator, options: std.json.StringifyOptions) ![]const u8 {
+    //     return std.json.stringifyAlloc(allocator, self, options);
+    // }
+};
+
 // Reference the model config directly
 pub fn contentCommand(r: *CliBuilder.AppRunner) !CliBuilder.Command {
     const message =
@@ -92,4 +127,7 @@ pub fn GetContentItem() !void {
     var req = try requests.Req.init(allocator, model.config.apikey);
     const response = try req.get(url);
     std.log.debug("Response: {s}", .{response});
+    const parsed = try json.parseFromSlice(ContentItem, allocator, response, .{});
+    defer parsed.deinit();
+    std.log.debug("ContentItem: {s}", .{parsed.value.title});
 }
