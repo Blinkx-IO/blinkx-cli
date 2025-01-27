@@ -58,7 +58,7 @@ pub fn aiCommand() !CliBuilder.Command {
     };
 }
 
-//TODO: Needs to handle streaming the response and outputing promppt to allow user to create or edit a file
+///TODO: Needs to handle streaming the response and outputing promppt to allow user to create or edit a file
 pub fn handleAi() !void {
     // Example of making an API request
     const allocator = std.heap.page_allocator;
@@ -76,7 +76,7 @@ pub fn handleAi() !void {
 
     // Example of making a request
     var req = try requests.Req.init(allocator, model.config.apikey);
-    const response = try req.get(url);
+    const response = try req.get(url, null);
     std.log.debug("Response: {s}", .{response});
 
     // Example of direct output

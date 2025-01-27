@@ -1,14 +1,19 @@
 const std = @import("std");
 const model = @import("../model.zig");
 
+/// HTTP Request handler for the Blinkx API
 pub const Req = struct {
     const Self = @This();
+    /// Shorthand for memory allocator type
     const Allocator = std.mem.Allocator;
 
+    /// Memory allocator for request operations
     allocator: Allocator,
+    /// HTTP client instance for making requests
     client: std.http.Client,
-    // headers: []std.http.Header,
+    /// HTTP headers for requests, including authorization
     headers: std.http.Client.Request.Headers,
+    /// API key for authentication, stored without 'Bearer' prefix
     apikey: []const u8 = "",
 
     pub fn init(allocator: Allocator, apikey: []const u8) !Self {
@@ -16,6 +21,7 @@ pub const Req = struct {
         // const auth_header = "Bearer " ++ .apikey;
         // Create the authorization header string
         const auth_header = try std.fmt.allocPrint(allocator, "Bearer {s}", .{apikey});
+        // defer allocator.free(auth_header);
         return Self{
             .allocator = allocator,
             .client = c,
@@ -36,11 +42,11 @@ pub const Req = struct {
         self.client.deinit();
     }
 
-    pub fn get(self: *Self, url: []const u8) ![]const u8 {
+    pub fn get(self: *Self, url: []const u8, buffer_size: ?usize) ![]const u8 {
         const uri = try std.Uri.parse(url);
-        const header_buffer = try self.allocator.alloc(u8, 8192);
+        const header_buffer = try self.allocator.alloc(u8, buffer_size orelse 8192);
         // 8KB buffer
-        defer self.allocator.free(header_buffer);
+        // defer self.allocator.free(header_buffer);
         var req = try self.client.open(.GET, uri, .{ .headers = self.headers, .server_header_buffer = header_buffer });
         defer req.deinit();
 
@@ -48,11 +54,10 @@ pub const Req = struct {
         try req.wait();
 
         const res = try req.reader().readAllAlloc(self.allocator, 1024 * 1024);
-
         return res;
     }
 
-    pub fn post(self: *Self, url: []const u8, body: ?[]const u8) ![]const u8 {
+    pub fn post(self: *Self, url: []const u8, body: ?[]const u8, buffer_size: ?usize) ![]const u8 {
         const headers = std.http.Client.Request.Headers{
             .authorization = self.headers.authorization,
             .content_type = .{ .override = "application/json" },
@@ -63,7 +68,7 @@ pub const Req = struct {
             std.log.debug("URL: {s}", .{url});
         }
         // Dynamically allocate header buffer
-        const header_buffer = try self.allocator.alloc(u8, 8192);
+        const header_buffer = try self.allocator.alloc(u8, buffer_size orelse 8192);
         // 8KB buffer
         defer self.allocator.free(header_buffer);
         const uri = try std.Uri.parse(url);
