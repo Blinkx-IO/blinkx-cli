@@ -6,9 +6,9 @@ const json = std.json;
 const requests = @import("requests.zig");
 
 const Body = struct {
-    components: []Component,
-    html: []const u8,
-    css: []const u8,
+    components: ?[]Component = null,
+    html: ?[]const u8 = null,
+    css: ?[]const u8 = null,
 };
 
 //TODO: make an enum for type
@@ -23,15 +23,14 @@ const SeoFields = struct {};
 
 pub const ContentItem = struct {
     item_id: i64,
-    title: []const u8,
-    content_type: []const u8,
-    body: Body,
-    status: []const u8 = "",
-    author: []const u8 = "",
-    page_url: []const u8 = "",
-    seo_fields: []const u8, //SeoFields, NOTE: this is until we get the seo fields working
-    published_date: []const u8,
-    // @"body-2": ?[]const u8,
+    title: ?[]const u8 = null,
+    content_type: ?[]const u8 = null,
+    body: ?Body = null,
+    status: ?[]const u8 = null,
+    author: ?[]const u8 = null,
+    page_url: ?[]const u8 = null,
+    seo_fields: ?[]const u8 = null,
+    published_date: ?[]const u8 = null,
 
     // pub fn jsonStringify(self: @This(), allocator: std.mem.Allocator, options: std.json.StringifyOptions) ![]const u8 {
     //     return std.json.stringifyAlloc(allocator, self, options);
@@ -126,8 +125,16 @@ pub fn GetContentItem() !void {
 
     var req = try requests.Req.init(allocator, model.config.apikey);
     const response = try req.get(url);
-    std.log.debug("Response: {s}", .{response});
-    const parsed = try json.parseFromSlice(ContentItem, allocator, response, .{});
+    // Print the raw response for debugging
+    std.debug.print("\n=== Raw JSON Response ===\n{s}\n=== End Response ===\n", .{response});
+
+    // Try parsing with more detailed error handling
+    const parsed = json.parseFromSlice(ContentItem, allocator, response, .{
+        .ignore_unknown_fields = true,
+    }) catch |err| {
+        std.debug.print("JSON Parse Error: {}\n", .{err});
+        return err;
+    };
     defer parsed.deinit();
-    std.log.debug("ContentItem: {s}", .{parsed.value.title});
+    std.log.debug("ContentItem: {s}", .{parsed.value.status.?});
 }
