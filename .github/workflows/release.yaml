@@ -26,11 +26,15 @@ jobs:
 
       - name: Build Linux
         run: |
+          # Clean build artifacts before build
+          rm -rf zig-out zig-cache
           zig build -Dproduction=true -Dtarget=x86_64-linux-gnu -Doptimize=ReleaseSafe
           mv zig-out/bin/* blinkx-linux-x86_64
 
       - name: Build Windows
         run: |
+          # Clean build artifacts before build
+          rm -rf zig-out zig-cache
           zig build -Dproduction=true -Dtarget=x86_64-windows-gnu -Doptimize=ReleaseSafe
           mv zig-out/bin/blinkx.exe blinkx-windows-x86_64.exe
 
