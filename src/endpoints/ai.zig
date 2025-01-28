@@ -5,8 +5,8 @@ const requests = @import("requests.zig");
 
 /// Template for creating new endpoint commands
 /// Replace 'template' with your endpoint name
-// pub fn templateCommand(r: *CliBuilder.AppRunner) !CliBuilder.Command {
-pub fn aiCommand() !CliBuilder.Command {
+pub fn aiCommand(r: *CliBuilder.AppRunner) !CliBuilder.Command {
+    // pub fn aiCommand() !CliBuilder.Command {
     const message =
         \\ Description of your endpoint functionality
         \\
@@ -33,15 +33,15 @@ pub fn aiCommand() !CliBuilder.Command {
             .detailed = message,
         },
         // Example of command options
-        // .options = try r.allocOptions(&.{
-        //     CliBuilder.Option{
-        //         .long_name = "option-name",
-        //         .help = "Description of the option",
-        //         .value_ref = r.mkRef(&model.config.your_config_field),
-        //         .value_name = "TYPE",  // INT, TEXT, etc
-        //         .short_alias = 'o',
-        //     },
-        // }),
+        .options = try r.allocOptions(&.{
+            CliBuilder.Option{
+                .long_name = "prompt",
+                .help = "Description of the option",
+                .value_ref = r.mkRef(&model.config.prompt),
+                .value_name = "TEXT", // INT, TEXT, etc
+                .short_alias = 'p',
+            },
+        }),
         .target = CliBuilder.CommandTarget{
             .action = CliBuilder.CommandAction{
                 .exec = handleAi,

@@ -168,7 +168,7 @@ pub fn contentCommand(r: *CliBuilder.AppRunner) !CliBuilder.Command {
         }),
         .target = CliBuilder.CommandTarget{
             .action = CliBuilder.CommandAction{
-                .exec = GetContentItem,
+                .exec = ContentItemCommand,
                 //Use this if you want to accept positional arguments
                 // .positional_args = CliBuilder.PositionalArgs{
                 //     .optional = try r.allocPositionalArgs(&.{CliBuilder.PositionalArg{
@@ -239,4 +239,8 @@ pub fn GetContentItem() !void {
 
     //TODO : Determin  based on cli flags what to use data for
     // Potential to get ai functions to call this function ie take this content and edit it
+}
+
+fn ContentItemCommand() !void {
+    try GetContentItem();
 }

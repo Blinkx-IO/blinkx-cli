@@ -21,6 +21,9 @@ pub const Config = struct {
     signup: bool = false,
     signup_url: []const u8 = "https://blinkx.io/signup",
 
+    //AI structures
+    prompt: []const u8 = "Give me a description of the content item",
+
     pub fn init() Config {
         var mode: Mode = .DEV;
         if (is_prod) {
@@ -32,7 +35,7 @@ pub const Config = struct {
             .mode = mode,
             .signup = false,
             .endpoint = if (mode == .DEV) "http://localhost:8080/api/v1" else "https://api.blinkx.com/v1",
-            .ai_endpoint = if (mode == .DEV) "https://ai.blinkx.workers.dev" else "https://ai.blinkx.com",
+            .ai_endpoint = if (mode == .DEV) "http://localhost:8787" else "https://ai.blinkx.workers.dev",
         };
     }
 };

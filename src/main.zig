@@ -51,7 +51,7 @@ pub fn main() !void {
             },
 
             .target = CliBuilder.CommandTarget{
-                .subcommands = &.{ try content.contentCommand(&r), try accounts.accountsCommand(&r), try ai.aiCommand() },
+                .subcommands = &.{ try content.contentCommand(&r), try accounts.accountsCommand(&r), try ai.aiCommand(&r) },
             },
         },
         .version = "0.0.2",
