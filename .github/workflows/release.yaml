@@ -40,12 +40,19 @@ jobs:
 
       - name: Build macOS
         run: |
+          # Create cache directories
+          sudo mkdir -p /home/runner/.cache/zig
+          sudo chmod 777 /home/runner/.cache/zig
+
           # Build for Intel Macs
           zig build -Dproduction=true -Dtarget=x86_64-macos-none -Doptimize=ReleaseSafe
           mv zig-out/bin/blinkx blinkx-macos-x86_64
 
-          # Clean build artifacts between builds
-          # rm -rf zig-out zig-cache
+          # Clean and recreate build artifacts
+          rm -rf zig-out zig-cache
+          sudo rm -rf /home/runner/.cache/zig/*
+          sudo mkdir -p /home/runner/.cache/zig
+          sudo chmod 777 /home/runner/.cache/zig
 
           # Build for Apple Silicon (M1/M2)
           zig build -Dproduction=true -Dtarget=aarch64-macos-none -Doptimize=ReleaseSafe
