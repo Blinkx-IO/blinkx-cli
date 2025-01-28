@@ -4,6 +4,11 @@ on:
   push:
     branches: ['main']
 
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
 jobs:
   release:
     name: Create Release
@@ -53,3 +58,33 @@ jobs:
             blinkx-macos-x86_64
             blinkx-macos-arm64
           generate_release_notes: true
+
+  docs:
+    needs: release
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Zig
+        uses: goto-bus-stop/setup-zig@v2
+        with:
+          version: 0.14.0-dev.2851+b074fb7dd
+
+      - name: Build documentation
+        run: zig build docs
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'zig-out/docs'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
