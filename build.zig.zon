@@ -25,10 +25,10 @@
     .dependencies = .{
         .@"zig-cli" = .{
             // URL pattern: https://github.com/sam701/zig-cli/archive/<commit hash>.tar.gz
-            // .url = "https://github.com/sam701/zig-cli/archive/f6925c35c5dbab5880fbfe197e9285983d859372.tar.gz",
-            // .hash = "1220cc1cf7dff2a1c0df453620a2469ee1384e728526a35c38a27d45b4def8a124f4",
-            .url = "https://github.com/sam701/zig-cli/archive/3795f25a5c0cba4013eea31db012007fb8b4d82c.tar.gz",
-            .hash = "122088ae1fc585b9f617c5fe9545acae35bce6c43e1eb7cd83172628804dca519753",
+            // .url = "https://github.com/sam701/zig-cli/archive/3795f25a5c0cba4013eea31db012007fb8b4d82c.tar.gz",
+            // .hash = "122088ae1fc585b9f617c5fe9545acae35bce6c43e1eb7cd83172628804dca519753",
+            .url = "https://github.com/sam701/zig-cli/archive/3c51a0496c579d0e6db650da74523f0e0939ba69.tar.gz",
+            .hash = "1220f6f9a6aadef20b6d820226f7076abfd634a71e67aa67ccf770fb8381883853b0",
         },
         // See `zig fetch --save <url>` for a command-line interface for adding dependencies.
         //.example = .{

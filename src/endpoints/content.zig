@@ -1,3 +1,7 @@
+//!Content module for Blinkx CLI
+//!
+//! This module provides functions for interacting with the Blinkx CMS content API.
+//! It includes functions for retrieving content items, managing content items, and interacting with the Blinkx CMS API.
 const std = @import("std");
 const model = @import("../model.zig");
 const CliBuilder = @import("zig-cli");
