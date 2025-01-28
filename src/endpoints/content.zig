@@ -183,6 +183,7 @@ pub fn contentCommand(r: *CliBuilder.AppRunner) !CliBuilder.Command {
 }
 
 //NOTE: Now that we got the json working we need pass cli flags to change the query params in the get request
+// pub fn GetContentItem() !void {
 pub fn GetContentItem() !void {
     const allocator = std.heap.page_allocator;
     const url = try std.fmt.allocPrint(allocator, "{s}/content-item?item_id={d}", .{
