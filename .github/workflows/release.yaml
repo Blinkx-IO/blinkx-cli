@@ -40,6 +40,9 @@ jobs:
           zig build -Dproduction=true -Dtarget=x86_64-macos-none -Doptimize=ReleaseSafe
           mv zig-out/bin/blinkx blinkx-macos-x86_64
 
+          # Clean build artifacts between builds
+          rm -rf zig-out zig-cache
+
           # Build for Apple Silicon (M1/M2)
           zig build -Dproduction=true -Dtarget=aarch64-macos-none -Doptimize=ReleaseSafe
           mv zig-out/bin/blinkx blinkx-macos-arm64
