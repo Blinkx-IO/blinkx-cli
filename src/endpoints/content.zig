@@ -181,6 +181,7 @@ pub fn contentCommand(r: *CliBuilder.AppRunner) !CliBuilder.Command {
         },
     };
 }
+
 //NOTE: Now that we got the json working we need pass cli flags to change the query params in the get request
 pub fn GetContentItem() !void {
     const allocator = std.heap.page_allocator;
@@ -193,6 +194,7 @@ pub fn GetContentItem() !void {
     if (model.config.mode == .DEV) {
         std.log.debug("Itemid is {d}", .{model.config.itemid});
         std.log.debug("URL is {s}", .{url});
+        // std.log.debug("Option is {s}", .{option});
     }
 
     var req = try requests.Req.init(allocator, model.config.apikey);
@@ -243,4 +245,10 @@ pub fn GetContentItem() !void {
 
 fn ContentItemCommand() !void {
     try GetContentItem();
+    // try GetContentItem() catch |err| {
+    //     std.debug.print("Error: {s}\n", .{err});
+    // };
+    // GetContentItem() catch |err| {
+    //     std.debug.print("Error: {s}\n", .{err});
+    // };
 }

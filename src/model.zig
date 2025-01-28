@@ -1,5 +1,8 @@
 const options = @import("build_options");
 pub const Mode = enum { DEV, PROD };
+
+pub const ContentOption = enum { ID, URL };
+
 const is_prod = options.production_mode;
 // Define a configuration structure with default values.
 pub const Config = struct {
