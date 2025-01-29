@@ -1,6 +1,7 @@
 const options = @import("build_options");
 pub const Mode = enum { DEV, PROD };
 
+/// Content can only be retrieved by ID or URL
 pub const ContentOption = enum { ID, URL };
 
 const is_prod = options.production_mode;
@@ -34,7 +35,7 @@ pub const Config = struct {
         }
         return Config{
             .itemid = 0, // You can set default values here
-            .apikey = "APIKEYNOTSET",
+            // .apikey = "APIKEYNOTSET",
             .mode = mode,
             .signup = false,
             .endpoint = if (mode == .DEV) "http://localhost:8080/api/v1" else "https://api.blinkx.com/v1",
