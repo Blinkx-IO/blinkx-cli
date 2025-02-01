@@ -1,8 +1,11 @@
 const options = @import("build_options");
 pub const Mode = enum { DEV, PROD };
-
+/// Verbose or JSON output for the Project AI Plan
+pub const PlanType = enum { JSON, VERBOSE };
 /// Content can only be retrieved by ID or URL
 pub const ContentOption = enum { ID, URL };
+
+pub const AiAction = enum { plan, chat, edit };
 
 const is_prod = options.production_mode;
 // Define a configuration structure with default values.
@@ -27,6 +30,10 @@ pub const Config = struct {
 
     //AI structures
     prompt: []const u8 = "Give me a description of the content item",
+    plan_type: PlanType = .JSON,
+    ai_action: AiAction = .plan,
+    //Positional arguments for ai command
+    // build_plan: bool = false,
 
     pub fn init() Config {
         var mode: Mode = .DEV;
@@ -39,7 +46,7 @@ pub const Config = struct {
             .mode = mode,
             .signup = false,
             .endpoint = if (mode == .DEV) "http://localhost:8080/api/v1" else "https://api.blinkx.com/v1",
-            .ai_endpoint = if (mode == .DEV) "http://localhost:8787" else "https://ai.blinkx.workers.dev",
+            .ai_endpoint = if (mode == .DEV) "https://ai.blinkx.workers.dev" else "https://ai.blinkx.workers.dev",
         };
     }
 };
