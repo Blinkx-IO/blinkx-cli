@@ -32,6 +32,8 @@ pub const Config = struct {
     prompt: []const u8 = "Give me a description of the content item",
     plan_type: PlanType = .JSON,
     ai_action: AiAction = .plan,
+    file: []const u8 = undefined,
+    content_item: []const u8 = undefined,
     //Positional arguments for ai command
     // build_plan: bool = false,
 

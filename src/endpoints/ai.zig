@@ -33,21 +33,31 @@ const Color = struct {
 pub fn aiCommand(r: *CliBuilder.AppRunner) !CliBuilder.Command {
     // pub fn aiCommand() !CliBuilder.Command {
     const message =
-        \\ Description of your endpoint functionality
+        \\ AI-powered operations for content creation and management
         \\
         \\ Examples:
         \\
-        \\ Basic usage:
-        \\ $ blinkx template
+        \\ Generate a project plan:
+        \\ $ blinkx ai plan --prompt "Create a pet ecom store" --plan-type json
         \\
-        \\ With options:
-        \\ $ blinkx template --option value
+        \\ Chat with context from a file:
+        \\ $ blinkx ai chat --prompt "Explain this code" --file ./src/main.zig
         \\
-        \\ With subcommand:
-        \\ $ blinkx template subcommand
+        \\ Edit with content item context:
+        \\ $ blinkx ai edit --prompt "Update the hero section" --content-item 123
         \\
-        \\ Note: Some operations require a valid API key to be set
-        \\ either via BLINKX_APIKEY environment variable or --apikey flag
+        \\ Available Actions:
+        \\   plan    - Generate a structured project plan
+        \\   chat    - Interactive chat with context
+        \\   edit    - AI-assisted content editing
+        \\
+        \\ Options:
+        \\   -p, --prompt         Text prompt for AI operation
+        \\   -t, --plan-type      Output format (VERBOSE or JSON)
+        \\   -f, --file           Attach a file for context
+        \\   -c, --content-item   Include Blinkx content item for context
+        \\
+        \\ Note: Requires a valid API key via BLINKX_APIKEY environment variable or --apikey flag
         \\
     ;
 
@@ -72,6 +82,20 @@ pub fn aiCommand(r: *CliBuilder.AppRunner) !CliBuilder.Command {
                 .value_ref = r.mkRef(&model.config.plan_type),
                 .value_name = "VERBOSE, JSON",
                 .short_alias = 't',
+            },
+            CliBuilder.Option{
+                .long_name = "file",
+                .help = "Any files to be attached to prompt",
+                .value_ref = r.mkRef(&model.config.file),
+                .value_name = "FILE",
+                .short_alias = 'f',
+            },
+            CliBuilder.Option{
+                .long_name = "content-item",
+                .help = "Content item from your blinkx project to be attached to prompt",
+                .value_ref = r.mkRef(&model.config.content_item),
+                .value_name = "CONTENT_ITEM",
+                .short_alias = 'c',
             },
         }),
         .target = CliBuilder.CommandTarget{
@@ -166,7 +190,30 @@ pub fn chat() !void {
     std.log.debug("Chatting with AI", .{});
 }
 pub fn edit() !void {
-    std.log.debug("Editing AI", .{});
+    var arena = std.heap.ArenaAllocator.init(std.heap.page_allocator);
+    defer arena.deinit();
+    const arena_allocator = arena.allocator();
+    const url = try std.fmt.allocPrint(arena_allocator, "{s}/edit", .{
+        model.config.ai_endpoint,
+        // model.config.content_item, //TODO : might need to be of type string or int
+    });
+
+    if (model.config.mode == .DEV) {
+        std.log.debug("Editing AI", .{});
+        std.log.debug("Edit URL is {s}", .{url});
+    }
+
+    const body = try std.fmt.allocPrint(arena_allocator,
+        \\{{"prompt":"{s}"}}
+    , .{model.config.prompt});
+    // Make request
+    var req = try requests.Req.init(arena_allocator, model.config.apikey);
+    // const response = try req.post(url, body, null);
+    const response = try req.post_fetch(url, body);
+
+    // std.log.debug("Response: {s}", .{response});
+    // Add green color for output
+    try writer.print("\x1b[32mOutput: {s}\x1b[0m\n", .{response.items});
 }
 
 ///TODO: Needs to handle streaming the response and outputing promppt to allow user to create or edit a file
