@@ -69,25 +69,21 @@ pub const Req = struct {
         //     .authorization = self.headers.authorization,
         //     .content_type = .{ .override = "application/json" },
         // };
-        if (model.config.mode == .DEV) {
-            std.log.debug("Running in DEV mode with endpoint: {s}", .{model.config.endpoint});
-            // std.log.debug("Headers: {any}", .{headers});
-            // std.log.debug("URL: {s}", .{url});
-        }
 
         // const header_buffer = try self.allocator.alloc(u8, buffer_size orelse 8192);
         // defer self.allocator.free(header_buffer);
         var response_body = std.ArrayList(u8).init(self.allocator);
         // const uri = try std.Uri.parse(url);
-        const response = try self.client.fetch(.{
+        //TODO : Handle all status error codes etc
+        _ = try self.client.fetch(.{
             .method = .POST,
             .extra_headers = headers,
             .response_storage = .{ .dynamic = &response_body },
             .location = .{ .url = url },
             .payload = body orelse null,
         });
-        try writer.print("Response Status: {d}\n Response Body:{s}\n", .{ response.status, response_body.items });
-
+        // try writer.print("Response Status: {d}\n Response Body:{s}\n", .{ response.status, response_body.items });
+        //
         return response_body;
     }
 

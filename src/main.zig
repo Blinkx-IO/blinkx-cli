@@ -17,9 +17,9 @@ pub fn main() !void {
         const blue = "38;2;137;180;250"; // #89b4fa
     };
     //This is only for testing in dev mode
-    if (model.config.mode == .DEV) {
-        std.log.debug("Running in DEV mode with endpoint: {s}", .{model.config.endpoint});
-    }
+    // if (model.config.mode == .DEV) {
+    //     std.log.debug("Running in DEV mode with endpoint: {s}", .{model.config.endpoint});
+    // }
     const detailedDescription =
         \\ Sign up for a free account at https://blinkx.io
         \\
@@ -66,8 +66,4 @@ pub fn main() !void {
         },
     };
     return r.run(&app);
-}
-
-fn run_server() !void {
-    std.log.debug("Running server", .{});
 }
